@@ -1,35 +1,32 @@
-/* eslint-disable require-await */
+import { defaultConfiguration } from '@configuration/defaultConfiguration';
 import { Configuration } from '@interfaces/configuration';
 
 import { getWordByNumber } from './getWordByNumber';
 import { rollDice } from './rollDice';
 
-const defaultConfiguration: Configuration = {
-  numberOfWords: 4,
-  defaultSeparator: '-',
-  useNumbers: false,
-};
-
-export const generatePassphrase = async (
+export const generatePassphrase = (
   configuration: Configuration = defaultConfiguration,
-): Promise<string> => {
+): string => {
   const { defaultSeparator, numberOfWords, useNumbers } = configuration;
 
-  const wordPromises = Array.from({ length: numberOfWords }, async () => {
+  const words = Array.from({ length: numberOfWords }, () => {
     const index = rollDice();
 
     return getWordByNumber(index);
   });
 
-  const words = await Promise.all(wordPromises);
+  const passphrase = words
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .map((word, index, originalWords) => {
+      if (useNumbers && index === Math.floor(Math.random() * numberOfWords)) {
+        const randomNumber = Math.floor(Math.random() * 99) + 1;
 
-  if (useNumbers) {
-    const randomIndex = Math.floor(Math.random() * numberOfWords);
+        return `${randomNumber}${word}`;
+      }
 
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+      return word;
+    })
+    .join(defaultSeparator);
 
-    words[randomIndex] = randomNumber.toString();
-  }
-
-  return words.join(defaultSeparator);
+  return passphrase;
 };

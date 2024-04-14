@@ -23,59 +23,51 @@ describe('generatePassphrase', () => {
     mockedGetWordByNumber.mockReturnValue(defaultWord);
   });
 
-  it('should generate a passphrase with default configuration', async () => {
+  it('should generate a passphrase with default configuration', () => {
     mockedGetWordByNumber
       .mockReturnValueOnce('foo')
       .mockReturnValueOnce('bar')
       .mockReturnValueOnce('baz')
       .mockReturnValueOnce('foobar');
 
-    const passphrase = await generatePassphrase();
+    const passphrase = generatePassphrase();
 
-    // ensure there is not a 5 digit number in the passphrase if useNumbers is false
-    expect(passphrase).not.toMatch(/\d{5}/);
+    // ensure there is not a digit number in the passphrase if useNumbers is false
+    expect(passphrase).not.toMatch(/\d+/);
 
     expect(passphrase).toEqual(`foo-bar-baz-foobar`);
   });
 
-  it('should generate a passphrase with a custom separator', async () => {
+  it('should generate a passphrase with a custom separator', () => {
     const customConfig = {
       numberOfWords: 3,
       defaultSeparator: '.',
       useNumbers: false,
     };
 
-    const passphrase = await generatePassphrase(customConfig);
+    const passphrase = generatePassphrase(customConfig);
 
     expect(passphrase).toEqual(`${defaultWord}.${defaultWord}.${defaultWord}`);
   });
 
-  it('should include numbers in the passphrase when configured', async () => {
+  it('should include numbers in the passphrase when configured', () => {
     const customConfig = {
-      numberOfWords: 4,
+      numberOfWords: 2,
       defaultSeparator: '-',
       useNumbers: true,
     };
 
-    mockedRollDice
-      .mockReturnValueOnce(1234)
-      .mockReturnValueOnce(4123)
-      .mockReturnValueOnce(5135)
-      .mockReturnValueOnce(1525);
+    mockedRollDice.mockReturnValueOnce(1234).mockReturnValueOnce(4123);
 
-    mockedGetWordByNumber
-      .mockReturnValueOnce('foo')
-      .mockReturnValueOnce('bar')
-      .mockReturnValueOnce('baz')
-      .mockReturnValueOnce('foobar');
+    mockedGetWordByNumber.mockReturnValueOnce('foo').mockReturnValueOnce('bar');
 
-    const passphrase = await generatePassphrase(customConfig);
+    const passphrase = generatePassphrase(customConfig);
 
-    // check if there is a five digit number in the passphrase
-    expect(passphrase).toMatch(/\d{5}/);
+    // check if there is a number in the passphrase
+    expect(passphrase).toMatch(/\d+/);
   });
 
-  it('should generate a passphrase with all mocked words', async () => {
+  it('should generate a passphrase with all mocked words', () => {
     const customConfig = {
       numberOfWords: 2,
       defaultSeparator: '|',
@@ -84,7 +76,7 @@ describe('generatePassphrase', () => {
 
     mockedGetWordByNumber.mockReturnValueOnce('foo').mockReturnValueOnce('bar');
 
-    const passphrase = await generatePassphrase(customConfig);
+    const passphrase = generatePassphrase(customConfig);
 
     expect(passphrase).toEqual(`foo|bar`);
   });
