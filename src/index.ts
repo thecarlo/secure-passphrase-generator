@@ -7,27 +7,33 @@ import { rollDice } from './rollDice';
 export const generatePassphrase = (
   configuration: Configuration = defaultConfiguration,
 ): string => {
-  const { defaultSeparator, numberOfWords, useNumbers } = configuration;
+  const { defaultSeparator, numberOfWords, useNumbers, capitalize } =
+    configuration;
 
-  const words = Array.from({ length: numberOfWords }, () => {
-    const index = rollDice();
+  const indices = Array.from({ length: numberOfWords }, rollDice);
 
-    return getWordByNumber(index);
-  });
+  const words = indices.map(getWordByNumber);
 
   const numberIndex = useNumbers
     ? Math.floor(Math.random() * numberOfWords)
-    : null;
+    : -1;
 
   const passphrase = words
     .map((word, index) => {
+      let modifiedWord = word;
+
       if (useNumbers && index === numberIndex) {
         const randomNumber = Math.floor(Math.random() * 99) + 1;
 
-        return `${randomNumber}${word}`;
+        modifiedWord =
+          Math.random() < 0.5
+            ? `${randomNumber}${modifiedWord}`
+            : `${modifiedWord}${randomNumber}`;
       }
 
-      return word;
+      return capitalize
+        ? modifiedWord.charAt(0).toUpperCase() + modifiedWord.slice(1)
+        : modifiedWord;
     })
     .join(defaultSeparator);
 

@@ -32,7 +32,6 @@ describe('generatePassphrase', () => {
 
     const passphrase = generatePassphrase();
 
-    // ensure there is not a digit number in the passphrase if useNumbers is false
     expect(passphrase).not.toMatch(/\d+/);
 
     expect(passphrase).toEqual(`foo-bar-baz-foobar`);
@@ -43,6 +42,7 @@ describe('generatePassphrase', () => {
       numberOfWords: 3,
       defaultSeparator: '.',
       useNumbers: false,
+      capitalize: false,
     };
 
     const passphrase = generatePassphrase(customConfig);
@@ -55,6 +55,7 @@ describe('generatePassphrase', () => {
       numberOfWords: 2,
       defaultSeparator: '|',
       useNumbers: false,
+      capitalize: false,
     };
 
     mockedGetWordByNumber.mockReturnValueOnce('foo').mockReturnValueOnce('bar');
@@ -69,6 +70,7 @@ describe('generatePassphrase', () => {
       numberOfWords: 4,
       defaultSeparator: '-',
       useNumbers: true,
+      capitalize: false,
     };
 
     mockedRollDice
@@ -88,5 +90,77 @@ describe('generatePassphrase', () => {
     const match = passphrase.match(/\d+\w+/g);
 
     expect(match).toHaveLength(1);
+  });
+
+  it('should correctly handle numbers either prefixed or suffixed to the word', () => {
+    const customConfig = {
+      numberOfWords: 4,
+      defaultSeparator: '-',
+      useNumbers: true,
+      capitalize: false,
+    };
+
+    jest
+      .spyOn(global.Math, 'random')
+      .mockReturnValueOnce(0.4) // For prefixing or suffixing decision
+      .mockReturnValueOnce(0.1); // For determining position of the word to modify
+
+    const passphrase = generatePassphrase(customConfig);
+
+    const prefixMatches = passphrase.match(/\b\d+\w+\b/g) || [];
+
+    const suffixMatches = passphrase.match(/\b\w+\d+\b/g) || [];
+
+    const totalMatches = [...prefixMatches, ...suffixMatches];
+
+    expect(totalMatches).toHaveLength(1);
+
+    jest.restoreAllMocks();
+  });
+
+  it('should capitalize each word in the passphrase', () => {
+    const customConfig = {
+      numberOfWords: 5,
+      defaultSeparator: '.',
+      useNumbers: false,
+      capitalize: true,
+    };
+
+    const passphrase = generatePassphrase(customConfig);
+
+    expect(passphrase).toEqual('Word.Word.Word.Word.Word');
+  });
+
+  it('should handle capitalization with numbers correctly included', () => {
+    const customConfig = {
+      numberOfWords: 3,
+      defaultSeparator: '-',
+      useNumbers: true,
+      capitalize: true,
+    };
+
+    mockedGetWordByNumber
+      .mockReturnValueOnce('apple')
+      .mockReturnValueOnce('banana')
+      .mockReturnValueOnce('cherry');
+
+    jest
+      .spyOn(global.Math, 'random')
+      .mockReturnValueOnce(0.34) // Choosing the word (1st one, 0.34 * 3 ~ 1)
+      .mockReturnValueOnce(0.1) // Prefixing number
+      .mockReturnValueOnce(0.6); // Not used but could be for other logic
+
+    const passphrase = generatePassphrase(customConfig);
+
+    const matches =
+      passphrase.match(/\b(\d+[A-Z][a-z]*|[A-Z][a-z]*\d+)\b/g) || [];
+
+    expect(matches).toHaveLength(1);
+
+    expect(passphrase.split('-').every((word) => /^[A-Z]/.test(word))).toBe(
+      true,
+    );
+
+    jest.restoreAllMocks();
   });
 });

@@ -4,4 +4,5 @@ export const defaultConfiguration: Configuration = {
   numberOfWords: 4,
   defaultSeparator: '-',
   useNumbers: false,
+  capitalize: false,
 };
