@@ -73,8 +73,6 @@ describe('generatePassphrase', () => {
 
     // check if there is a five digit number in the passphrase
     expect(passphrase).toMatch(/\d{5}/);
-
-    console.log(passphrase);
   });
 
   it('should generate a passphrase with all mocked words', async () => {

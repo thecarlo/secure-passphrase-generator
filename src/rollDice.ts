@@ -7,7 +7,5 @@ export const rollDice = (): number => {
 
   const concatenatedResult = diceRolls.join('');
 
-  console.log(concatenatedResult);
-
   return parseInt(concatenatedResult);
 };
