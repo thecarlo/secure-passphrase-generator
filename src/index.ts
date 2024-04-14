@@ -15,10 +15,13 @@ export const generatePassphrase = (
     return getWordByNumber(index);
   });
 
+  const numberIndex = useNumbers
+    ? Math.floor(Math.random() * numberOfWords)
+    : null;
+
   const passphrase = words
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    .map((word, index, originalWords) => {
-      if (useNumbers && index === Math.floor(Math.random() * numberOfWords)) {
+    .map((word, index) => {
+      if (useNumbers && index === numberIndex) {
         const randomNumber = Math.floor(Math.random() * 99) + 1;
 
         return `${randomNumber}${word}`;

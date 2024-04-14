@@ -50,23 +50,6 @@ describe('generatePassphrase', () => {
     expect(passphrase).toEqual(`${defaultWord}.${defaultWord}.${defaultWord}`);
   });
 
-  it('should include numbers in the passphrase when configured', () => {
-    const customConfig = {
-      numberOfWords: 2,
-      defaultSeparator: '-',
-      useNumbers: true,
-    };
-
-    mockedRollDice.mockReturnValueOnce(1234).mockReturnValueOnce(4123);
-
-    mockedGetWordByNumber.mockReturnValueOnce('foo').mockReturnValueOnce('bar');
-
-    const passphrase = generatePassphrase(customConfig);
-
-    // check if there is a number in the passphrase
-    expect(passphrase).toMatch(/\d+/);
-  });
-
   it('should generate a passphrase with all mocked words', () => {
     const customConfig = {
       numberOfWords: 2,
@@ -79,5 +62,31 @@ describe('generatePassphrase', () => {
     const passphrase = generatePassphrase(customConfig);
 
     expect(passphrase).toEqual(`foo|bar`);
+  });
+
+  it('should include numbers in the passphrase when configured and ensure only one word has numbers prefixed', () => {
+    const customConfig = {
+      numberOfWords: 4,
+      defaultSeparator: '-',
+      useNumbers: true,
+    };
+
+    mockedRollDice
+      .mockReturnValueOnce(1234)
+      .mockReturnValueOnce(4123)
+      .mockReturnValueOnce(234)
+      .mockReturnValueOnce(142);
+
+    mockedGetWordByNumber
+      .mockReturnValueOnce('apple')
+      .mockReturnValueOnce('banana')
+      .mockReturnValueOnce('cherry')
+      .mockReturnValueOnce('date');
+
+    const passphrase = generatePassphrase(customConfig);
+
+    const match = passphrase.match(/\d+\w+/g);
+
+    expect(match).toHaveLength(1);
   });
 });
