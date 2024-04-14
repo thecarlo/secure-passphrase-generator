@@ -18,7 +18,7 @@ export const generatePassphrase = async (
   const wordPromises = Array.from({ length: numberOfWords }, async () => {
     const index = rollDice();
 
-    return getWordByNumber(index.toString());
+    return getWordByNumber(index);
   });
 
   const words = await Promise.all(wordPromises);

@@ -1,13 +1,13 @@
-import { getWordlist } from './getWordList';
+import { wordMap } from './wordlist/wordMap';
 
-export const getWordByNumber = async (number: string): Promise<string> => {
+export const getWordByNumber = (num: number): string => {
   try {
-    const wordMap = await getWordlist();
+    const wordList = wordMap;
 
-    const word = wordMap.get(number);
+    const word = wordList.get(num);
 
     if (!word) {
-      throw new Error(`No word found for number: ${number}`);
+      throw new Error(`No word found for number: ${num}`);
     }
 
     return word;

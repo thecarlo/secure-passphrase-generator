@@ -20,15 +20,15 @@ describe('generatePassphrase', () => {
 
     mockedRollDice.mockReturnValue(1234);
 
-    mockedGetWordByNumber.mockResolvedValue(defaultWord);
+    mockedGetWordByNumber.mockReturnValue(defaultWord);
   });
 
   it('should generate a passphrase with default configuration', async () => {
     mockedGetWordByNumber
-      .mockResolvedValueOnce('foo')
-      .mockResolvedValueOnce('bar')
-      .mockResolvedValueOnce('baz')
-      .mockResolvedValueOnce('foobar');
+      .mockReturnValueOnce('foo')
+      .mockReturnValueOnce('bar')
+      .mockReturnValueOnce('baz')
+      .mockReturnValueOnce('foobar');
 
     const passphrase = await generatePassphrase();
 
@@ -64,10 +64,10 @@ describe('generatePassphrase', () => {
       .mockReturnValueOnce(1525);
 
     mockedGetWordByNumber
-      .mockResolvedValueOnce('foo')
-      .mockResolvedValueOnce('bar')
-      .mockResolvedValueOnce('baz')
-      .mockResolvedValueOnce('foobar');
+      .mockReturnValueOnce('foo')
+      .mockReturnValueOnce('bar')
+      .mockReturnValueOnce('baz')
+      .mockReturnValueOnce('foobar');
 
     const passphrase = await generatePassphrase(customConfig);
 
@@ -84,9 +84,7 @@ describe('generatePassphrase', () => {
       useNumbers: false,
     };
 
-    mockedGetWordByNumber
-      .mockResolvedValueOnce('foo')
-      .mockResolvedValueOnce('bar');
+    mockedGetWordByNumber.mockReturnValueOnce('foo').mockReturnValueOnce('bar');
 
     const passphrase = await generatePassphrase(customConfig);
 
