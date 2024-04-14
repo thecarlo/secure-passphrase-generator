@@ -20,20 +20,19 @@ export const generatePassphrase = (
 
   const passphrase = words
     .map((word, index) => {
-      let modifiedWord = word;
+      const modifiedWord = capitalize
+        ? word.charAt(0).toUpperCase() + word.slice(1)
+        : word;
 
       if (useNumbers && index === numberIndex) {
         const randomNumber = Math.floor(Math.random() * 99) + 1;
 
-        modifiedWord =
-          Math.random() < 0.5
-            ? `${randomNumber}${modifiedWord}`
-            : `${modifiedWord}${randomNumber}`;
+        return Math.random() < 0.5
+          ? `${randomNumber}${modifiedWord}`
+          : `${modifiedWord}${randomNumber}`;
       }
 
-      return capitalize
-        ? modifiedWord.charAt(0).toUpperCase() + modifiedWord.slice(1)
-        : modifiedWord;
+      return modifiedWord;
     })
     .join(defaultSeparator);
 
