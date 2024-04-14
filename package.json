@@ -1,7 +1,7 @@
 {
   "name": "@humankode/secure-passphrase-generator",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "repository": "github:thecarlo/secure-passphrase-generator",
   "description": "A secure passphrase generator that generates a passphrase using the dice method",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "npx tsc && tsup",
-    "test": "jest",
+    "test": "jest --silent --maxWorkers=50%",
     "test:coverage": "jest --coverage --silent --maxWorkers=50%",
     "lint": "eslint --debug 'src/**/*.ts'",
     "lint:fix": "eslint --fix 'src/**/*.ts'",
