@@ -1,16 +1,16 @@
-import * as getWordByNumberModule from './getWordByNumber';
+import * as getWordByIndexModule from './getWordByIndex';
 import { generatePassphrase } from './index';
 import * as rollDiceModule from './rollDice';
 
 jest.mock('./rollDice');
 
-jest.mock('./getWordByNumber');
+jest.mock('./getWordByIndex');
 
 describe('generatePassphrase', () => {
   const mockedRollDice = jest.mocked(rollDiceModule.rollDice);
 
   const mockedGetWordByNumber = jest.mocked(
-    getWordByNumberModule.getWordByNumber,
+    getWordByIndexModule.getWordByIndex,
   );
 
   const defaultWord = 'word';

@@ -1,7 +1,7 @@
 import { defaultConfiguration } from '@configuration/defaultConfiguration';
 import { Configuration } from '@interfaces/configuration';
 
-import { getWordByNumber } from './getWordByNumber';
+import { getWordByIndex } from './getWordByIndex';
 import { rollDice } from './rollDice';
 
 export const generatePassphrase = (
@@ -12,7 +12,7 @@ export const generatePassphrase = (
 
   const indices = Array.from({ length: numberOfWords }, rollDice);
 
-  const words = indices.map(getWordByNumber);
+  const words = indices.map(getWordByIndex);
 
   const numberIndex = useNumbers
     ? Math.floor(Math.random() * numberOfWords)

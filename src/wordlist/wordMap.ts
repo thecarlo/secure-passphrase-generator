@@ -885,7 +885,7 @@ export const wordMap = new Map<number, string>([
   [5142, 'phonebook'],
   [5143, 'phrasing'],
   [5144, 'physician'],
-  [5145, 'plank'],
+  [5145, 'playstation'],
   [5146, 'pledge'],
   [5151, 'plotted'],
   [5152, 'plug'],
