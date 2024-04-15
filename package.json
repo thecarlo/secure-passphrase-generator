@@ -1,12 +1,13 @@
 {
   "name": "@humankode/secure-passphrase-generator",
   "private": false,
-  "version": "0.0.13",
+  "version": "0.0.14",
   "repository": "github:thecarlo/secure-passphrase-generator",
   "description": "A secure passphrase generator that generates a passphrase using the dice method",
   "main": "./dist/index.js",
   "files": [
-    "dist/index.js"
+    "dist/index.js",
+    "dist/index.d.ts"
   ],
   "author": {
     "name": "Carlo van Wyk",
